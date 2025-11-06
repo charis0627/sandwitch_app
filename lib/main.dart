@@ -5,6 +5,8 @@ void main() {
   // runApp(const MyApp());
 }
 
+enum SandwichSize { sixInch, footlong }
+
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -32,6 +34,10 @@ class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
   final TextEditingController _noteController = TextEditingController();
   String _note = '';
+  SandwichSize _selectedSize = SandwichSize.footlong;
+
+  String _sizeLabel(SandwichSize s) =>
+      s == SandwichSize.footlong ? 'Footlong' : '6-inch';
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
@@ -70,9 +76,25 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // Size selector
+            SegmentedButton<SandwichSize>(
+              segments: const <ButtonSegment<SandwichSize>>[
+                ButtonSegment(
+                    value: SandwichSize.sixInch, label: Text('6-inch')),
+                ButtonSegment(
+                    value: SandwichSize.footlong, label: Text('Footlong')),
+              ],
+              selected: <SandwichSize>{_selectedSize},
+              onSelectionChanged: (Set<SandwichSize> newSelection) {
+                setState(() {
+                  _selectedSize = newSelection.first;
+                });
+              },
+            ),
+            const SizedBox(height: 12),
             OrderItemDisplay(
               _quantity,
-              'Footlong',
+              _sizeLabel(_selectedSize),
               note: _note,
             ),
             Padding(
