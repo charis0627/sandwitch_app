@@ -93,25 +93,30 @@ class _OrderScreenState extends State<OrderScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  child: ElevatedButton(
-                    onPressed: _increaseQuantity,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 244, 54, 139),
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('Add'),
+                ElevatedButton(
+                  onPressed:
+                      _quantity < widget.maxQuantity ? _increaseQuantity : null,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) => states.contains(WidgetState.disabled)
+                            ? Colors.grey
+                            : const Color.fromARGB(255, 244, 54, 139)),
+                    foregroundColor:
+                        WidgetStateProperty.all<Color>(Colors.white),
                   ),
+                  child: const Text('Add'),
                 ),
-                SizedBox(
-                  child: ElevatedButton(
-                    onPressed: _decreaseQuantity,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 244, 54, 139),
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('Remove'),
+                ElevatedButton(
+                  onPressed: _quantity > 0 ? _decreaseQuantity : null,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) => states.contains(WidgetState.disabled)
+                            ? Colors.grey
+                            : const Color.fromARGB(255, 244, 54, 139)),
+                    foregroundColor:
+                        WidgetStateProperty.all<Color>(Colors.white),
                   ),
+                  child: const Text('Remove'),
                 ),
               ],
             ),
