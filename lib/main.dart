@@ -11,19 +11,31 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sandwich Shop App',
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Sandwich Counter')),
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const OrderItemDisplay(3, 'BLT'),
-            const OrderItemDisplay(5, 'Club'),
-            const OrderItemDisplay(2, 'Veggie'),
-          ],
-        ),
-      ),
-    );
+        title: 'Sandwich Shop App',
+        home: Scaffold(
+          appBar: AppBar(title: const Text('Sandwich Counter')),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const OrderItemDisplay(5, 'Footlong'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => print('Add button pressed!'),
+                      child: const Text('Add'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => print('Remove button pressed!'),
+                      child: const Text('Remove'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -36,7 +48,8 @@ class OrderItemDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
-    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
+    return Text(
+        '$quantity $itemType sandwich(es): ${List.filled(quantity, '🥪').join()}');
   }
 }
 
