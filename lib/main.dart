@@ -30,17 +30,34 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
+  final TextEditingController _noteController = TextEditingController();
+  String _note = '';
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
-      setState(() => _quantity++);
+      final captured = _noteController.text.trim();
+      setState(() {
+        _quantity++;
+        _note = captured;
+      });
     }
   }
 
   void _decreaseQuantity() {
     if (_quantity > 0) {
-      setState(() => _quantity--);
+      final captured = _noteController.text.trim();
+      setState(() {
+        _quantity--;
+        // Keep the latest note while there are items, clear when none left
+        _note = _quantity > 0 ? captured : '';
+      });
     }
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,6 +73,22 @@ class _OrderScreenState extends State<OrderScreen> {
             OrderItemDisplay(
               _quantity,
               'Footlong',
+              note: _note,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: TextField(
+                controller: _noteController,
+                decoration: InputDecoration(
+                  hintText: 'Add special request (e.g., "no onions")',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () => _noteController.clear(),
+                  ),
+                ),
+                maxLength: 250,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -80,14 +113,16 @@ class _OrderScreenState extends State<OrderScreen> {
 class OrderItemDisplay extends StatelessWidget {
   final String itemType;
   final int quantity;
+  final String? note;
 
-  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
+  const OrderItemDisplay(this.quantity, this.itemType, {this.note, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final noteText = (note == null || note!.isEmpty) ? '' : '\nNote: $note';
     // ignore: prefer_const_constructors
     return Text(
-        '$quantity $itemType sandwich(es): ${List.filled(quantity, '🥪').join()}');
+        '$quantity $itemType sandwich(es): ${List.filled(quantity, '🥪').join()}$noteText');
   }
 }
 
