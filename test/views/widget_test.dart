@@ -96,8 +96,10 @@ void main() {
       // Initially should be footlong
       expect(find.textContaining('footlong sandwich'), findsOneWidget);
 
-      // Tap the Switch to change to six-inch
-      await tester.tap(find.byType(Switch));
+      // Tap the size Switch to change to six-inch
+      final sizeSwitch = find.byKey(const Key('sandwich_type_switch'));
+      expect(sizeSwitch, findsOneWidget);
+      await tester.tap(sizeSwitch);
       await tester.pumpAndSettle();
 
       // Now the display should show six-inch
