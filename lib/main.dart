@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/repositories/order_repository.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
 
 enum BreadType { white, wheat, wholemeal }
 
@@ -33,6 +34,7 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
+  late final PricingRepository _pricingRepository;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
@@ -42,6 +44,7 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
+    _pricingRepository = PricingRepository();
     _notesController.addListener(() {
       setState(() {});
     });
@@ -183,6 +186,16 @@ class _OrderScreenState extends State<OrderScreen> {
                   backgroundColor: Colors.red,
                 ),
               ],
+            ),
+            const SizedBox(height: 12),
+            // Display total price for the current selection and quantity
+            Text(
+              'Total: ${_pricingRepository.totalPriceFormatted(
+                quantity: _orderRepository.quantity,
+                size:
+                    _isFootlong ? SandwichSize.footlong : SandwichSize.sixinch,
+              )}',
+              style: normalText,
             ),
           ],
         ),
