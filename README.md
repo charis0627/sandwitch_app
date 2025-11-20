@@ -113,8 +113,8 @@ If you use VS Code you can press F5 or use the Run and Debug pane.
 	StyledButton). This file demonstrates the UI for size selection, bread type
 	dropdown, notes input, and Add/Remove behavior.
 - `lib/views/app_styles.dart` — shared `TextStyle` constants used by the UI.
-- `lib/repositories/order_repository.dart` — a small repository class that
-	stores the current order quantity and enforces `maxQuantity`.
+- `lib/repositories/pricing_repository.dart` — pricing helpers for sandwich sizes and totals.
+- `lib/models/cart.dart` — simple cart model that holds items and computes totals.
 - `pubspec.yaml` — package metadata and dependencies.
 
 ---

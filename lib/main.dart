@@ -32,7 +32,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  late final OrderRepository _orderRepository;
+  int _quantity = 0;
   late final PricingRepository _pricingRepository;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
@@ -42,7 +42,6 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
-    _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
     _pricingRepository = PricingRepository();
     _notesController.addListener(() {
       setState(() {});
@@ -56,15 +55,15 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   VoidCallback? _getIncreaseCallback() {
-    if (_orderRepository.canIncrement) {
-      return () => setState(_orderRepository.increment);
+    if (_quantity < widget.maxQuantity) {
+      return () => setState(() => _quantity++);
     }
     return null;
   }
 
   VoidCallback? _getDecreaseCallback() {
-    if (_orderRepository.canDecrement) {
-      return () => setState(_orderRepository.decrement);
+    if (_quantity > 0) {
+      return () => setState(() => _quantity--);
     }
     return null;
   }
@@ -107,6 +106,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: SizedBox(
+          height: 100,
+          child: Image.asset('assets/images/logo.png'),
+        ),
         title: const Text(
           'Sandwich Counter',
           style: heading1,
@@ -117,7 +120,7 @@ class _OrderScreenState extends State<OrderScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             OrderItemDisplay(
-              quantity: _orderRepository.quantity,
+              quantity: _quantity,
               itemType: sandwichType,
               breadType: _selectedBreadType,
               orderNote: noteForDisplay,
@@ -190,7 +193,7 @@ class _OrderScreenState extends State<OrderScreen> {
             // Display total price for the current selection and quantity
             Text(
               'Total: ${_pricingRepository.totalPriceFormatted(
-                quantity: _orderRepository.quantity,
+                quantity: _quantity,
                 size:
                     _isFootlong ? SandwichSize.footlong : SandwichSize.sixinch,
               )}',
