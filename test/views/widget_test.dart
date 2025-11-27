@@ -154,5 +154,46 @@ void main() {
       // app remains on OrderScreen and no exceptions thrown
       expect(find.byType(OrderScreen), findsOneWidget);
     });
+
+    testWidgets('shows SnackBar and inline confirmation when adding to cart',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
+
+      // Find the Add to Cart button and make sure it's visible, then tap it
+      final Finder addButton =
+          find.widgetWithText(ElevatedButton, 'Add to Cart');
+      expect(addButton, findsOneWidget);
+
+      // ensure the button is visible (fixes off-screen tap in test environment)
+      await tester.ensureVisible(addButton);
+      await tester.pumpAndSettle();
+
+      await tester.tap(addButton);
+      // Let animations (SnackBar, setState) run
+      await tester.pumpAndSettle();
+
+      // Expect a SnackBar to be shown
+      expect(find.byType(SnackBar), findsOneWidget);
+
+      // Expect an inline confirmation Text widget containing the confirmation phrase
+      final Finder confirmationTextFinder = find.byWidgetPredicate((widget) {
+        if (widget is Text && widget.data != null) {
+          return widget.data!.contains('Added 1') &&
+              widget.data!.contains('to cart');
+        }
+        return false;
+      });
+
+      // There may be a matching Text inside the SnackBar and a matching inline Text.
+      // Count all matches, count matches inside the SnackBar, and assert there's at least
+      // one match outside the SnackBar (the inline confirmation).
+      final int totalMatches = tester.widgetList(confirmationTextFinder).length;
+      final Finder inSnackBar = find.descendant(
+          of: find.byType(SnackBar), matching: confirmationTextFinder);
+      final int snackMatches = tester.widgetList(inSnackBar).length;
+      final int inlineMatches = totalMatches - snackMatches;
+      expect(inlineMatches, greaterThanOrEqualTo(1));
+    });
   });
 }
