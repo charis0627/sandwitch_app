@@ -44,6 +44,9 @@ class _OrderScreenState extends State<OrderScreen> {
   BreadType _selectedBreadType = BreadType.white;
   int _quantity = 1;
 
+  // store last confirmation message for inline display
+  String _confirmationMessage = '';
+
   @override
   void initState() {
     super.initState();
@@ -80,6 +83,18 @@ class _OrderScreenState extends State<OrderScreen> {
           'Added $_quantity $sizeText ${sandwich.name} sandwich(es) on ${_selectedBreadType.name} bread to cart';
 
       debugPrint(confirmationMessage);
+
+      // update inline message
+      setState(() {
+        _confirmationMessage = confirmationMessage;
+      });
+
+      // show a transient SnackBar
+      final snackBar = SnackBar(
+        content: Text(confirmationMessage),
+        duration: const Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -250,6 +265,22 @@ class _OrderScreenState extends State<OrderScreen> {
                 label: 'Add to Cart',
                 backgroundColor: Colors.green,
               ),
+              const SizedBox(height: 12),
+              // inline persistent confirmation area
+              if (_confirmationMessage.isNotEmpty)
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    border: Border.all(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _confirmationMessage,
+                    style: normalText,
+                  ),
+                ),
               const SizedBox(height: 20),
             ],
           ),
