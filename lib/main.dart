@@ -47,6 +47,10 @@ class _OrderScreenState extends State<OrderScreen> {
   // store last confirmation message for inline display
   String _confirmationMessage = '';
 
+  // permanent cart summary state
+  int _cartItemCount = 0;
+  double _cartTotalPrice = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -73,6 +77,13 @@ class _OrderScreenState extends State<OrderScreen> {
         _cart.add(sandwich, _quantity);
       });
 
+      // update local cart summary (price computed by simple rule below)
+      final double unitPrice = _priceFor(sandwich);
+      setState(() {
+        _cartItemCount += _quantity;
+        _cartTotalPrice += unitPrice * _quantity;
+      });
+
       String sizeText;
       if (_isFootlong) {
         sizeText = 'footlong';
@@ -96,6 +107,19 @@ class _OrderScreenState extends State<OrderScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+  }
+
+  // Simple pricing rule: adjust as needed or replace with real model price.
+  double _priceFor(Sandwich sandwich) {
+    // base prices (six-inch, footlong is ~ +3.0)
+    const double sixInchBase = 5.0;
+    const double footlongExtra = 3.0;
+    double base = sixInchBase;
+    // example: slightly cheaper veggie
+    if (sandwich.type == SandwichType.veggieDelight) {
+      base = 4.5;
+    }
+    return sandwich.isFootlong ? base + footlongExtra : base;
   }
 
   VoidCallback? _getAddToCartCallback() {
@@ -264,6 +288,31 @@ class _OrderScreenState extends State<OrderScreen> {
                 icon: Icons.add_shopping_cart,
                 label: 'Add to Cart',
                 backgroundColor: Colors.green,
+              ),
+              const SizedBox(height: 12),
+              // Permanent cart summary (item count + total price)
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                color: Colors.grey.shade50,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.shopping_cart,
+                              color: Colors.black54),
+                          const SizedBox(width: 8),
+                          Text('Items: $_cartItemCount', style: normalText),
+                        ],
+                      ),
+                      Text('Total: \$${_cartTotalPrice.toStringAsFixed(2)}',
+                          style: normalText),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 12),
               // inline persistent confirmation area

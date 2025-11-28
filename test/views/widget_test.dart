@@ -195,5 +195,24 @@ void main() {
       final int inlineMatches = totalMatches - snackMatches;
       expect(inlineMatches, greaterThanOrEqualTo(1));
     });
+
+    testWidgets('cart summary updates after adding to cart',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
+
+      final Finder addToCartFinder =
+          find.widgetWithText(ElevatedButton, 'Add to Cart');
+      expect(addToCartFinder, findsOneWidget);
+
+      await tester.ensureVisible(addToCartFinder);
+      await tester.tap(addToCartFinder);
+      await tester.pumpAndSettle();
+
+      // The permanent summary Card should show 1 item and the computed total price.
+      // For the default Veggie Delight footlong the price is 4.5 + 3.0 = 7.5
+      expect(find.text('Items: 1'), findsOneWidget);
+      expect(find.text('Total: \$7.50'), findsOneWidget);
+    });
   });
 }
