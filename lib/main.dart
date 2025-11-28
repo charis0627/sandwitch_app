@@ -161,6 +161,7 @@ class _OrderScreenState extends State<OrderScreen> {
       isFootlong: _isFootlong,
       breadType: _selectedBreadType,
     );
+    debugPrint('Image path: ${sandwich.image}');
     return sandwich.image;
   }
 
