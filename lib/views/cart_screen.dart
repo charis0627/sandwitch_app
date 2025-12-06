@@ -36,7 +36,7 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Cart',
+          'Cart View',
           style: heading1,
         ),
       ),
@@ -47,65 +47,100 @@ class _CartScreenState extends State<CartScreen> {
                 style: heading2,
               ),
             )
-          : ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                final sandwich = item.sandwich;
-                final unitPrice = _priceFor(sandwich);
-                final totalPrice = unitPrice * item.quantity;
+          : Column(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 40),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ...items.map((item) {
+                            final sandwich = item.sandwich;
+                            final unitPrice = _priceFor(sandwich);
+                            final totalPrice = unitPrice * item.quantity;
 
-                final sizeText = sandwich.isFootlong ? 'Footlong' : 'Six-inch';
-                final breadText = sandwich.breadType.name;
+                            final sizeText =
+                                sandwich.isFootlong ? 'Footlong' : 'Six-inch';
+                            final breadText = sandwich.breadType.name;
 
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: ListTile(
-                    leading: const Icon(Icons.fastfood, size: 40),
-                    title: Text(
-                      sandwich.name,
-                      style: heading2,
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 32),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    sandwich.name,
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '$sizeText on $breadText bread',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Qty: ${item.quantity} - £${totalPrice.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Total: £${_calculateTotal().toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    subtitle: Text(
-                      '$sizeText • $breadText bread • Qty: ${item.quantity}',
-                      style: normalText,
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    trailing: Text(
-                      '\$${totalPrice.toStringAsFixed(2)}',
-                      style: heading2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.arrow_back, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          'Back to Order',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
-      bottomNavigationBar: items.isEmpty
-          ? null
-          : Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade400,
-                    blurRadius: 4,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Total:',
-                    style: heading1,
-                  ),
-                  Text(
-                    '\$${_calculateTotal().toStringAsFixed(2)}',
-                    style: heading1,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
     );
   }
