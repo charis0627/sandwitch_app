@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/views/cart_screen.dart';
 
 const TextStyle heading2 = TextStyle(
   fontSize: 20,
@@ -292,26 +293,44 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               const SizedBox(height: 12),
               // Permanent cart summary (item count + total price)
-              Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                color: Colors.grey.shade50,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.shopping_cart,
-                              color: Colors.black54),
-                          const SizedBox(width: 8),
-                          Text('Items: $_cartItemCount', style: normalText),
-                        ],
-                      ),
-                      Text('Total: \$${_cartTotalPrice.toStringAsFixed(2)}',
-                          style: normalText),
-                    ],
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(cart: _cart),
+                    ),
+                  );
+                },
+                child: Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  color: Colors.grey.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.shopping_cart,
+                                color: Colors.black54),
+                            const SizedBox(width: 8),
+                            Text('Items: $_cartItemCount', style: normalText),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                'Total: \$${_cartTotalPrice.toStringAsFixed(2)}',
+                                style: normalText),
+                            const SizedBox(width: 8),
+                            const Icon(Icons.arrow_forward_ios,
+                                size: 16, color: Colors.black54),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
