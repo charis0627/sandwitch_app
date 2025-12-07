@@ -124,9 +124,9 @@ class _CartScreenState extends State<CartScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(Icons.arrow_back, color: Colors.white),
                         SizedBox(width: 8),
                         Text(
