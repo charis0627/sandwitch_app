@@ -134,6 +134,32 @@ class _CartScreenState extends State<CartScreen> {
                                               color: Colors.white),
                                         ),
                                       ),
+                                      const SizedBox(width: 16),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            widget.cart.removeItem(sandwich);
+                                          });
+                                          final snackBar = SnackBar(
+                                            content: Text(
+                                              'Removed ${sandwich.name} from cart',
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 8),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
