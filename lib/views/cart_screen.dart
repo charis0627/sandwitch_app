@@ -18,17 +18,6 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  // Helper to compute price for a sandwich using same logic as OrderScreen
-  double _priceFor(Sandwich sandwich) {
-    const double sixInchBase = 5.0;
-    const double footlongExtra = 3.0;
-    double base = sixInchBase;
-    if (sandwich.type == SandwichType.veggieDelight) {
-      base = 4.5;
-    }
-    return sandwich.isFootlong ? base + footlongExtra : base;
-  }
-
   @override
   Widget build(BuildContext context) {
     final items = widget.cart.items;
@@ -168,7 +157,7 @@ class _CartScreenState extends State<CartScreen> {
                           }).toList(),
                           const SizedBox(height: 16),
                           Text(
-                            'Total: £${_calculateTotal().toStringAsFixed(2)}',
+                            'Total: £${widget.cart.totalPricePounds().toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -214,12 +203,13 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  double _calculateTotal() {
-    double total = 0.0;
-    for (final item in widget.cart.items) {
-      final unitPrice = _priceFor(item.sandwich);
-      total += unitPrice * item.quantity;
+  double _priceFor(Sandwich sandwich) {
+    const double sixInchBase = 5.0;
+    const double footlongExtra = 3.0;
+    double base = sixInchBase;
+    if (sandwich.type == SandwichType.veggieDelight) {
+      base = 4.5;
     }
-    return total;
+    return sandwich.isFootlong ? base + footlongExtra : base;
   }
 }
