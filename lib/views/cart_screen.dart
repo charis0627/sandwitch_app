@@ -30,10 +30,57 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
       body: items.isEmpty
-          ? const Center(
-              child: Text(
-                'Your cart is empty',
-                style: heading2,
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 80,
+                    color: Colors.grey.shade400,
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Your cart is empty',
+                    style: heading2,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Add some sandwiches to get started!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add_shopping_cart, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          'Continue Shopping',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             )
           : Column(
