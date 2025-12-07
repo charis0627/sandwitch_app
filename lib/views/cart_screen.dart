@@ -93,6 +93,49 @@ class _CartScreenState extends State<CartScreen> {
                                       color: Colors.black87,
                                     ),
                                   ),
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            widget.cart.remove(sandwich, 1);
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 8),
+                                          backgroundColor: Colors.blue,
+                                        ),
+                                        child: const Text(
+                                          '–',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            widget.cart.add(sandwich, 1);
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 8),
+                                          backgroundColor: Colors.blue,
+                                        ),
+                                        child: const Text(
+                                          '+',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             );
