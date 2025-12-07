@@ -91,6 +91,15 @@ class _CartScreenState extends State<CartScreen> {
                                           setState(() {
                                             widget.cart.remove(sandwich, 1);
                                           });
+                                          final snackBar = SnackBar(
+                                            content: Text(
+                                              'Decreased ${sandwich.name} quantity',
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                         },
                                         style: ElevatedButton.styleFrom(
                                           padding: const EdgeInsets.symmetric(
@@ -110,6 +119,15 @@ class _CartScreenState extends State<CartScreen> {
                                           setState(() {
                                             widget.cart.add(sandwich, 1);
                                           });
+                                          final snackBar = SnackBar(
+                                            content: Text(
+                                              'Increased ${sandwich.name} quantity',
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                         },
                                         style: ElevatedButton.styleFrom(
                                           padding: const EdgeInsets.symmetric(
